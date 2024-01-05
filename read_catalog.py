@@ -3,7 +3,6 @@ Read Yosio's catalog into a pandas dataframe and output it into a csv file for
 easier future processing
 """
 import pandas as pd
-import numpy as np
 
 catfile = "UTIGTR_0018/levent.1008.dat"
 catcsvfile = "levent.csv"
@@ -47,6 +46,9 @@ locs_df[['Depth', 'DepSigma']] = locs_df['Depth'].str.split(' ± ',
 # Reorder to put uncertainties after values
 locs_df = locs_df[['Number', 'Latitude', 'LatSigma', 'Longitude', 'LonSigma',
                    'Depth', 'DepSigma']]
+# Fix negative sign formatting
+locs_df['Latitude'] = locs_df['Latitude'].str.replace('−','-')
+locs_df['Longitude'] = locs_df['Longitude'].str.replace('−','-')
 print(locs_df)
 
 # Output to csv file
