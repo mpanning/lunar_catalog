@@ -21,9 +21,11 @@ def spheuclid(lat1, lon1, r1, lat2, lon2, r2):
     return distance
     
 catcsvfile = "levent.csv"
-ifNormalize = False
+ifNormalize = True
 pltxlims = [0, 1250]
 pltylims = [0.02, 30]
+euclidxlims = [0, 650]
+euclidylims = [0.03, 30]
 
 df = pd.read_csv(catcsvfile, index_col=0, encoding='utf-8')
 
@@ -264,7 +266,7 @@ for i in range(len(ddiff)):
         ampratio[i] = 1./ampratio[i]
         
 plt.clf()
-plt.scatter(ddiff, ampratio)
+plt.scatter(ddiff, ampratio, label="Nakamura amplitude ratios")
 plt.yscale("log")
 
 # Calculate best fit line between ddiff and log(ampratio) constrained
@@ -279,13 +281,16 @@ print("Proportionality factor: {}".format(a[0]))
 # xmin = np.amin(x)
 xmax = np.amax(x)
 ypred = [1.0, math.pow(10, a[0]*xmax)]
-plt.plot([0, xmax], ypred, color='red')
-plt.xlim(pltxlims[0], pltxlims[1])
-plt.ylim(pltylims[0], pltylims[1])
+plt.plot([0, xmax], ypred, color='red', label="Best fit exponential function")
+plt.legend()
+plt.xlabel("Difference in source to station distance (km)")
+plt.ylabel("Amplitude ratio between stations")
+plt.xlim(euclidxlims[0], euclidxlims[1])
+plt.ylim(euclidylims[0], euclidylims[1])
 
 # print(a, xmin, xmax)
 if ifNormalize:
     pngfile = 'AmpratioNormEuclid.png'
 else:
     pngfile = 'AmpratioEuclid.png'
-plt.savefig(pngfile)
+plt.savefig(pngfile, dpi=300)

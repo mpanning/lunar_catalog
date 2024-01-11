@@ -116,6 +116,6 @@ print("Relative amplitude reduction: {} (north) {} (south)".format(R_npole,
                                                                    R_spole))
 
 Rpole = 0.5*(R_npole + R_spole)
-DetectionFactor = 1./math.pow(Rpole,-4./3.)
+DetectionFactor = 0.5*1./math.pow(Rpole,-4./3.)
 
 print("Reduction factor for pole detections: {}".format(DetectionFactor))
