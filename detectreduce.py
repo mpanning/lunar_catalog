@@ -32,7 +32,11 @@ def spheuclid(lat1, lon1, r1, lat2, lon2, r2):
 Apollolocsfile = 'LanderLocs.csv'
 DMQlocsfile = 'Nakamura2005Locs.csv'
 LunarMeanRadius = 1737.4
-C_est = -0.00054
+
+# Values for detection reduction calculation
+C_est = -0.0005398 # Slope from log-linear fit
+bvalue = 1.0
+
 
 lander_df = pd.read_csv(Apollolocsfile, index_col=0, encoding='utf-8')
 A12lat = lander_df.loc[(lander_df['Lander'] == 'A12') &
@@ -116,6 +120,6 @@ print("Relative amplitude reduction: {} (north) {} (south)".format(R_npole,
                                                                    R_spole))
 
 Rpole = 0.5*(R_npole + R_spole)
-DetectionFactor = 0.5*1./math.pow(Rpole,-4./3.)
+DetectionFactor = 1./math.pow(Rpole,-2.*bvalue/3.)
 
 print("Reduction factor for pole detections: {}".format(DetectionFactor))
