@@ -34,9 +34,12 @@ DMQlocsfile = 'Nakamura2005Locs.csv'
 LunarMeanRadius = 1737.4
 
 # Values for detection reduction calculation
-C_est = -0.0005398 # Slope from log-linear fit
+slope = -0.0005398 # Slope from log-linear fit
+C_est = slope*math.log(10) # Correcting for slope being estimated from a
+                                # log 10 plot
 bvalue = 1.0
 
+print("Exponent estimated as {}".format(C_est))
 
 lander_df = pd.read_csv(Apollolocsfile, index_col=0, encoding='utf-8')
 A12lat = lander_df.loc[(lander_df['Lander'] == 'A12') &
@@ -67,13 +70,13 @@ centerlat = math.degrees(math.asin(centerxyz[2]/math.sqrt(centerxyz[0]**2 +
                                                           centerxyz[2]**2)))
 centerlon = math.degrees(math.asin(centerxyz[1]/math.sqrt(centerxyz[0]**2 +
                                                           centerxyz[1]**2)))
-# print(centerlat, centerlon)
+print("Center of network: {}, {}".format(centerlat, centerlon))
 
 # Find the mean depth of the events
 locs_df = pd.read_csv(DMQlocsfile, index_col=0, encoding='utf-8')
 meanDepth = locs_df.loc[:,['Depth']].mean().iloc[0]
 
-# print(meanDepth)
+print("Mean depth of DMQS: {} km".format(meanDepth))
 
 # Find average distance to Apollo stations from center of network at DMQ depth
 A12tocenter = spheuclid(A12lat, A12lon, LunarMeanRadius, centerlat, centerlon,
